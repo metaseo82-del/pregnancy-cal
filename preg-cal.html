@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pregnancy Conception Calculator (Fertile Window & Due Date)</title>
+
+  <!-- SEO: Primary -->
+  <meta name="description" content="Calculate your estimated fertile window, likely conception date range, and due date based on your last menstrual period, cycle length, and luteal phase." />
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+  <link rel="canonical" href="https://example.com/pregnancy-conception-calculator" />
+
+  <!-- SEO: Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Pregnancy Conception Calculator" />
+  <meta property="og:description" content="Estimate your fertile window, conception range, and due date with a simple, responsive calculator." />
+  <meta property="og:url" content="https://example.com/pregnancy-conception-calculator" />
+  <meta property="og:image" content="https://example.com/og/pregnancy-calculator.png" />
+
+  <!-- SEO: Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Pregnancy Conception Calculator" />
+  <meta name="twitter:description" content="Estimate your fertile window, conception range, and due date." />
+  <meta name="twitter:image" content="https://example.com/og/pregnancy-calculator.png" />
+
+  <!-- Performance: preconnect (optional) -->
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+
+  <!-- =========================
+       Google AdSense (Site-wide)
+       1) Replace ca-pub-XXXXXXXXXXXXXXXX with YOUR publisher ID.
+       ========================= -->
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+
+  <!-- Structured Data: WebPage + SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Pregnancy Conception Calculator",
+    "description": "Calculator for estimated fertile window, conception date range, and due date using menstrual cycle inputs.",
+    "url": "https://example.com/pregnancy-conception-calculator",
+    "mainEntity": {
+      "@type": "SoftwareApplication",
+      "name": "Pregnancy Conception Calculator",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+  }
+  </script>
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#111a2e;
+      --muted:#8ea3c7;
+      --text:#eaf1ff;
+      --accent:#6ee7ff;
+      --accent2:#a78bfa;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 18px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 0%, rgba(110,231,255,.18), transparent 60%),
+        radial-gradient(900px 600px at 90% 15%, rgba(167,139,250,.18), transparent 55%),
+        linear-gradient(180deg, #070b14, var(--bg));
+      line-height:1.45;
+    }
+    a{color:var(--accent)}
+    header{
+      padding: clamp(18px, 3.5vw, 34px) 16px 18px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+    }
+    .logo{
+      width:42px; height:42px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(110,231,255,.95), rgba(167,139,250,.95));
+      box-shadow: 0 10px 24px rgba(110,231,255,.18);
+    }
+    h1{
+      font-size: clamp(20px, 2.6vw, 30px);
+      margin:0;
+      letter-spacing:.2px;
+    }
+    .subtitle{
+      margin:6px 0 0;
+      color:var(--muted);
+      max-width: 70ch;
+      font-size: 14.5px;
+    }
+
+    main{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px 44px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+    }
+    @media (max-width: 980px){
+      main{grid-template-columns: 1fr}
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card > .hd{
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+    .card > .bd{ padding: 16px; }
+    .kicker{
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+    .hd h2{
+      margin:6px 0 0;
+      font-size: 18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 520px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    label{
+      display:block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    input, select, button, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(9,14,26,.6);
+      color: var(--text);
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(110,231,255,.55);
+      box-shadow: 0 0 0 4px rgba(110,231,255,.12);
+    }
+    .row{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .hint{
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    .btns{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top: 12px;
+    }
+    button{
+      cursor:pointer;
+      border: 1px solid rgba(110,231,255,.35);
+      background: linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.16));
+      font-weight: 650;
+    }
+    button.secondary{
+      border-color: var(--border);
+      background: rgba(255,255,255,.04);
+      font-weight: 600;
+    }
+
+    .results{
+      display:grid;
+      gap:12px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-size: 12.5px;
+      white-space:nowrap;
+    }
+    .pill strong{color:var(--text)}
+    .stat{
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(255,255,255,.03);
+    }
+    .stat .t{color:var(--muted); font-size: 12.5px}
+    .stat .v{font-size: 16px; font-weight: 750; margin-top: 4px}
+    .stat .v small{font-weight:600; color:var(--muted)}
+    .bar{
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+      margin-top:10px;
+      border: 1px solid var(--border);
+    }
+    .bar > span{
+      display:block;
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(52,211,153,.95), rgba(110,231,255,.95));
+      transition: width .35s ease;
+    }
+
+    .note{
+      font-size: 13px;
+      color: var(--muted);
+      border-left: 3px solid rgba(110,231,255,.55);
+      padding: 10px 12px;
+      background: rgba(110,231,255,.06);
+      border-radius: 14px;
+    }
+    .warning{
+      border-left-color: rgba(251,191,36,.7);
+      background: rgba(251,191,36,.08);
+    }
+
+    /* Ad slots */
+    .ad{
+      border: 1px dashed rgba(142,163,199,.45);
+      border-radius: 16px;
+      background: rgba(255,255,255,.02);
+      padding: 12px;
+    }
+    .ad .adlabel{
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .ad .adlabel span{opacity:.85}
+    .ad .adbox{
+      display:flex; align-items:center; justify-content:center;
+      min-height: 90px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .ad.responsive .adbox{min-height: 140px}
+    .ad.sidebar .adbox{min-height: 250px}
+    footer{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px 30px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .faq details{
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(255,255,255,.03);
+    }
+    .faq summary{
+      cursor:pointer;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .faq p{margin:10px 0 0}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    textarea{min-height: 120px; resize: vertical}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Pregnancy Conception Calculator</h1>
+        <p class="subtitle">
+          Estimate your <strong>fertile window</strong>, likely <strong>conception range</strong>, and <strong>due date</strong>
+          using your last period date and cycle details. (Informational only — not medical advice.)
+        </p>
+      </div>
+    </div>
+
+    <div class="row" style="align-items:flex-end">
+      <div style="min-width:220px">
+        <label for="compression">Compression level</label>
+        <select id="compression" aria-label="Compression level">
+          <option value="readable">Readable (best for editing)</option>
+          <option value="balanced" selected>Balanced (recommended)</option>
+          <option value="aggressive">Aggressive (smallest embed)</option>
+        </select>
+        <div class="hint">Affects the generated “embed code” below.</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Top responsive ad slot -->
+<section class="ad responsive" style="max-width:1100px; margin: 0 auto 16px; padding: 0 16px;">
+  <div class="ad">
+    <div class="adlabel">
+      <span>Advertisement</span>
+      <span class="mono">Top Responsive</span>
+    </div>
+    <div class="adbox">
+      <!-- =========================
+           AdSense Ad Unit (Top)
+           Replace data-ad-slot with YOUR ad unit id.
+           ========================= -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="YYYYYYYYYY"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+</section>
+
+<main>
+  <!-- Calculator -->
+  <section class="card" aria-labelledby="calcTitle">
+    <div class="hd">
+      <div>
+        <div class="kicker">Calculator</div>
+        <h2 id="calcTitle">Enter your details</h2>
+      </div>
+      <div class="row">
+        <span class="pill"><strong>Tip:</strong> Use ultrasound for most accurate dating.</span>
+      </div>
+    </div>
+
+    <div class="bd">
+      <form id="form" novalidate>
+        <div class="grid">
+          <div>
+            <label for="lmp">First day of last menstrual period (LMP)</label>
+            <input id="lmp" name="lmp" type="date" required />
+            <div class="hint">If you know ovulation date, enter LMP anyway; we’ll estimate with your cycle inputs.</div>
+          </div>
+
+          <div>
+            <label for="cycleLen">Average cycle length (days)</label>
+            <input id="cycleLen" name="cycleLen" type="number" inputmode="numeric" min="20" max="45" value="28" required />
+            <div class="hint">Typical range: 21–35 days.</div>
+          </div>
+
+          <div>
+            <label for="luteal">Luteal phase length (days)</label>
+            <input id="luteal" name="luteal" type="number" inputmode="numeric" min="10" max="18" value="14" required />
+            <div class="hint">Commonly ~14 days (varies per person).</div>
+          </div>
+
+          <div>
+            <label for="cycleType">Cycle regularity</label>
+            <select id="cycleType" name="cycleType">
+              <option value="regular" selected>Regular</option>
+              <option value="irregular">Irregular / Not sure</option>
+            </select>
+            <div class="hint">Irregular cycles widen the fertile window estimate.</div>
+          </div>
+
+          <div>
+            <label for="sexTiming">Intercourse timing (optional)</label>
+            <select id="sexTiming" name="sexTiming">
+              <option value="unknown" selected>Unknown / not tracking</option>
+              <option value="before">Mostly before ovulation</option>
+              <option value="during">During fertile window</option>
+              <option value="after">Mostly after ovulation</option>
+            </select>
+            <div class="hint">Used only to adjust the “most likely” day within the conception range.</div>
+          </div>
+
+          <div>
+            <label for="timezone">Date display</label>
+            <select id="timezone" name="timezone">
+              <option value="local" selected>Local dates</option>
+              <option value="utc">UTC dates</option>
+            </select>
+            <div class="hint">For consistent sharing across regions, choose UTC.</div>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button type="submit">Calculate</button>
+          <button type="button" class="secondary" id="resetBtn">Reset</button>
+          <button type="button" class="secondary" id="copyBtn">Copy results</button>
+        </div>
+
+        <p class="note warning" id="validationNote" style="display:none; margin-top:12px;">
+          Please enter valid values. Cycle length should be 20–45 days and luteal phase 10–18 days.
+        </p>
+
+        <p class="note" style="margin-top:12px;">
+          <strong>Disclaimer:</strong> This tool provides estimates based on typical biology (sperm can survive up to ~5 days; the egg ~12–24 hours).
+          It is not a substitute for medical advice.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Results + Sidebar Ads -->
+  <aside class="card" aria-labelledby="resTitle">
+    <div class="hd">
+      <div>
+        <div class="kicker">Results</div>
+        <h2 id="resTitle">Your estimates</h2>
+      </div>
+      <div class="row" id="badges"></div>
+    </div>
+    <div class="bd">
+      <div class="results" id="results">
+        <div class="stat">
+          <div class="t">Estimated ovulation date</div>
+          <div class="v" id="ovulation">—</div>
+          <div class="bar" aria-hidden="true"><span id="ovBar"></span></div>
+          <div class="hint">Ovulation is estimated as <span class="mono">LMP + (cycleLen − luteal)</span>.</div>
+        </div>
+
+        <div class="stat">
+          <div class="t">Estimated fertile window</div>
+          <div class="v" id="fertile">—</div>
+          <div class="hint">Typically ~5 days before ovulation through ovulation day.</div>
+        </div>
+
+        <div class="stat">
+          <div class="t">Estimated conception date range</div>
+          <div class="v" id="conception">—</div>
+          <div class="hint">Based on sperm + egg viability and your cycle regularity.</div>
+        </div>
+
+        <div class="stat">
+          <div class="t">Estimated due date (40 weeks from LMP)</div>
+          <div class="v" id="due">—</div>
+          <div class="hint">Your clinician may adjust based on ultrasound measurements.</div>
+        </div>
+
+        <div class="stat">
+          <div class="t">Trimester milestones</div>
+          <div class="v" id="trimesters">—</div>
+          <div class="hint">Approximate trimester boundaries.</div>
+        </div>
+
+        <!-- Sidebar ad slot -->
+        <div class="ad sidebar">
+          <div class="adlabel">
+            <span>Advertisement</span>
+            <span class="mono">Sidebar</span>
+          </div>
+          <div class="adbox">
+            <!-- =========================
+                 AdSense Ad Unit (Sidebar)
+                 Replace data-ad-slot with YOUR ad unit id.
+                 ========================= -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="ZZZZZZZZZZ"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="t">Embed code (generated)</div>
+          <div class="hint">
+            Use this if you want to embed the calculator elsewhere. Compression level controls the size/format.
+          </div>
+          <textarea id="embedOut" class="mono" readonly></textarea>
+          <div class="btns" style="margin-top:10px">
+            <button type="button" class="secondary" id="copyEmbedBtn">Copy embed code</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<section class="card" style="max-width:1100px; margin: 0 auto 16px; padding: 0 16px;">
+  <div class="hd">
+    <div>
+      <div class="kicker">FAQ</div>
+      <h2>Common questions</h2>
+    </div>
+  </div>
+  <div class="bd faq" style="display:grid; gap:12px">
+    <details>
+      <summary>How accurate is a conception calculator?</summary>
+      <p>
+        It’s an estimate. Accuracy depends on how regular your cycles are and whether ovulation timing differs.
+        Early ultrasound dating is usually more accurate for due date estimates.
+      </p>
+    </details>
+    <details>
+      <summary>What if my cycle is irregular?</summary>
+      <p>
+        Select <strong>Irregular / Not sure</strong>. The tool will widen the fertile window and conception range.
+        If you track ovulation (OPKs, BBT), use those to refine your estimate.
+      </p>
+    </details>
+    <details>
+      <summary>Can I use this for IVF/IUI cycles?</summary>
+      <p>
+        This calculator is designed for natural cycles. For assisted reproduction, due dates are often calculated from
+        transfer date and embryo age—ask your clinic for the best method.
+      </p>
+    </details>
+  </div>
+</section>
+
+<!-- Bottom responsive ad slot -->
+<section class="ad responsive" style="max-width:1100px; margin: 0 auto 26px; padding: 0 16px;">
+  <div class="ad">
+    <div class="adlabel">
+      <span>Advertisement</span>
+      <span class="mono">Bottom Responsive</span>
+    </div>
+    <div class="adbox">
+      <!-- =========================
+           AdSense Ad Unit (Bottom)
+           Replace data-ad-slot with YOUR ad unit id.
+           ========================= -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="AAAAAAAAAA"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>
+    © <span id="yr"></span> Pregnancy Conception Calculator. This site provides informational estimates only.
+  </p>
+</footer>
+
+<script>
+  // ---------- Utilities ----------
+  const $ = (id) => document.getElementById(id);
+
+  function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+  function toDateOnly(d, mode){
+    // keep date-only semantics; format later
+    const x = new Date(d.getTime());
+    if (mode === "utc"){
+      // normalize to UTC midnight to avoid TZ shifts in formatting
+      return new Date(Date.UTC(x.getUTCFullYear(), x.getUTCMonth(), x.getUTCDate()));
+    }
+    return new Date(x.getFullYear(), x.getMonth(), x.getDate());
+  }
+
+  function addDays(d, days, mode){
+    const x = toDateOnly(d, mode);
+    x.setDate(x.getDate() + days);
+    return x;
+  }
+
+  function fmt(d, mode){
+    const date = toDateOnly(d, mode);
+    const opt = { year:"numeric", month:"short", day:"2-digit" };
+    // Use en-US style; adjust if you want locale auto-detect.
+    return new Intl.DateTimeFormat("en-US", opt).format(date);
+  }
+
+  function fmtRange(a, b, mode){
+    return `${fmt(a, mode)} – ${fmt(b, mode)}`;
+  }
+
+  function daysBetween(a, b, mode){
+    const A = toDateOnly(a, mode).getTime();
+    const B = toDateOnly(b, mode).getTime();
+    const ms = 24*60*60*1000;
+    return Math.round((B - A) / ms);
+  }
+
+  function safeParseDate(value){
+    // value is yyyy-mm-dd from input[type=date]
+    if (!value) return null;
+    const [y,m,d] = value.split("-").map(Number);
+    if (!y || !m || !d) return null;
+    // Create local date; we later normalize per mode when formatting/calculating.
+    return new Date(y, m-1, d);
+  }
+
+  // ---------- Core Calculation ----------
+  function calculate({ lmp, cycleLen, luteal, cycleType, sexTiming, mode }){
+    // Ovulation estimate: cycleLen - luteal days after LMP
+    const ovulationDayOffset = cycleLen - luteal;
+    const ovulation = addDays(lmp, ovulationDayOffset, mode);
+
+    // Fertile window baseline: ovulation -5 to ovulation (inclusive)
+    let fertileStart = addDays(ovulation, -5, mode);
+    let fertileEnd = addDays(ovulation, 0, mode);
+
+    // Conception range baseline: fertileStart to ovulation+1 (egg viability)
+    let conceptionStart = fertileStart;
+    let conceptionEnd = addDays(ovulation, 1, mode);
+
+    // If irregular, widen estimates
+    if (cycleType === "irregular"){
+      // widen by 2 days on each side (conservative)
+      fertileStart = addDays(fertileStart, -2, mode);
+      fertileEnd = addDays(fertileEnd, 2, mode);
+      conceptionStart = addDays(conceptionStart, -2, mode);
+      conceptionEnd = addDays(conceptionEnd, 2, mode);
+    }
+
+    // Most-likely conception day within range, loosely adjusted
+    let likely = ovulation;
+    if (sexTiming === "before") likely = addDays(ovulation, -1, mode);
+    if (sexTiming === "during") likely = ovulation;
+    if (sexTiming === "after")  likely = addDays(ovulation, 1, mode);
+
+    // Due date: 280 days (40 weeks) from LMP
+    const due = addDays(lmp, 280, mode);
+
+    // Trimesters (approx):
+    // End 1st: 13w6d (97 days) from LMP
+    // End 2nd: 27w6d (195 days) from LMP
+    const tri1End = addDays(lmp, 97, mode);
+    const tri2End = addDays(lmp, 195, mode);
+
+    // "Progress" bar: how close to ovulation relative to a 28-day cycle
+    const ovPct = clamp((ovulationDayOffset / 28) * 100, 0, 100);
+
+    return {
+      ovulation, fertileStart, fertileEnd,
+      conceptionStart, conceptionEnd, likely,
+      due, tri1End, tri2End, ovPct
+    };
+  }
+
+  // ---------- Embed code generator with "compression" ----------
+  function buildEmbedHTML(compression){
+    const snippet = `
+<!-- Pregnancy Conception Calculator Embed -->
+<div id="pcc-embed"></div>
+<script>
+(function(){
+  var root=document.getElementById('pcc-embed');
+  if(!root) return;
+  root.innerHTML='<iframe title="Pregnancy Conception Calculator" loading="lazy" style="width:100%;height:900px;border:0;border-radius:16px;overflow:hidden" src="' + (location.origin || '') + '/pregnancy-conception-calculator" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+})();
+</script>
+<!-- /Embed -->`.trim();
+
+    if (compression === "readable") return snippet;
+
+    // Balanced: remove extra blank lines, trim, keep readable
+    if (compression === "balanced"){
+      return snippet
+        .replace(/\n{2,}/g, "\n")
+        .replace(/[ \t]+\n/g, "\n")
+        .trim();
+    }
+
+    // Aggressive: minify whitespace
+    return snippet
+      .replace(/\s+/g, " ")
+      .replace(/> </g, "><")
+      .trim();
+  }
+
+  // ---------- DOM / Interaction ----------
+  const form = $("form");
+  const validationNote = $("validationNote");
+  const ovEl = $("ovulation");
+  const fertEl = $("fertile");
+  const concEl = $("conception");
+  const dueEl = $("due");
+  const triEl = $("trimesters");
+  const badges = $("badges");
+  const ovBar = $("ovBar");
+  const embedOut = $("embedOut");
+  const compressionSel = $("compression");
+
+  function updateEmbed(){
+    embedOut.value = buildEmbedHTML(compressionSel.value);
+  }
+
+  function setBadges({cycleLen, cycleType, luteal}){
+    badges.innerHTML = "";
+    const mk = (label, value) => {
+      const s = document.createElement("span");
+      s.className = "pill";
+      s.innerHTML = `<strong>${label}:</strong> ${value}`;
+      badges.appendChild(s);
+    };
+    mk("Cycle", `${cycleLen}d`);
+    mk("Luteal", `${luteal}d`);
+    mk("Regularity", cycleType === "regular" ? "Regular" : "Irregular");
+  }
+
+  function validInputs({lmp, cycleLen, luteal}){
+    if (!lmp) return false;
+    if (!Number.isFinite(cycleLen) || cycleLen < 20 || cycleLen > 45) return false;
+    if (!Number.isFinite(luteal) || luteal < 10 || luteal > 18) return false;
+    if (cycleLen - luteal < 6) return false; // sanity: ovulation offset too early
+    return true;
+  }
+
+  function run(){
+    const mode = $("timezone").value; // local | utc
+    const lmp = safeParseDate($("lmp").value);
+    const cycleLen = Number($("cycleLen").value);
+    const luteal = Number($("luteal").value);
+    const cycleType = $("cycleType").value;
+    const sexTiming = $("sexTiming").value;
+
+    const ok = validInputs({lmp, cycleLen, luteal});
+    validationNote.style.display = ok ? "none" : "block";
+    if (!ok){
+      ovEl.textContent = fertEl.textContent = concEl.textContent = dueEl.textContent = triEl.textContent = "—";
+      ovBar.style.width = "0%";
+      setBadges({cycleLen: isFinite(cycleLen)?cycleLen:"—", cycleType, luteal: isFinite(luteal)?luteal:"—"});
+      updateEmbed();
+      return;
+    }
+
+    const r = calculate({ lmp, cycleLen, luteal, cycleType, sexTiming, mode });
+
+    ovEl.innerHTML = `${fmt(r.ovulation, mode)} <small>(~Day ${cycleLen - luteal})</small>`;
+    fertEl.textContent = fmtRange(r.fertileStart, r.fertileEnd, mode);
+    concEl.innerHTML = `${fmtRange(r.conceptionStart, r.conceptionEnd, mode)} <small>(most likely: ${fmt(r.likely, mode)})</small>`;
+    dueEl.textContent = fmt(r.due, mode);
+
+    triEl.innerHTML =
+      `1st trimester ends: <strong>${fmt(r.tri1End, mode)}</strong><br/>` +
+      `2nd trimester ends: <strong>${fmt(r.tri2End, mode)}</strong><br/>` +
+      `3rd trimester: <strong>${fmt(addDays(r.tri2End, 1, mode), mode)}</strong> → <strong>${fmt(r.due, mode)}</strong>`;
+
+    ovBar.style.width = `${r.ovPct.toFixed(0)}%`;
+
+    setBadges({cycleLen, cycleType, luteal});
+    updateEmbed();
+  }
+
+  form.addEventListener("submit", (e) => { e.preventDefault(); run(); });
+
+  $("resetBtn").addEventListener("click", () => {
+    form.reset();
+    // set defaults
+    $("cycleLen").value = 28;
+    $("luteal").value = 14;
+    $("cycleType").value = "regular";
+    $("sexTiming").value = "unknown";
+    $("timezone").value = "local";
+    // clear results
+    ovEl.textContent = fertEl.textContent = concEl.textContent = dueEl.textContent = triEl.textContent = "—";
+    badges.innerHTML = "";
+    validationNote.style.display = "none";
+    ovBar.style.width = "0%";
+    updateEmbed();
+  });
+
+  $("copyBtn").addEventListener("click", async () => {
+    const lines = [];
+    const ov = ovEl.textContent || ovEl.innerText;
+    const fert = fertEl.textContent;
+    const conc = concEl.textContent || concEl.innerText;
+    const due = dueEl.textContent;
+    const tri = triEl.innerText.replace(/\n+/g, " | ");
+    lines.push("Pregnancy Conception Calculator Results");
+    lines.push(`Ovulation: ${ov}`);
+    lines.push(`Fertile window: ${fert}`);
+    lines.push(`Conception range: ${conc}`);
+    lines.push(`Due date: ${due}`);
+    lines.push(`Trimesters: ${tri}`);
+    try{
+      await navigator.clipboard.writeText(lines.join("\n"));
+      $("copyBtn").textContent = "Copied!";
+      setTimeout(()=> $("copyBtn").textContent = "Copy results", 900);
+    }catch{
+      alert("Copy failed. You can manually select and copy the results.");
+    }
+  });
+
+  $("copyEmbedBtn").addEventListener("click", async () => {
+    try{
+      await navigator.clipboard.writeText(embedOut.value);
+      $("copyEmbedBtn").textContent = "Copied!";
+      setTimeout(()=> $("copyEmbedBtn").textContent = "Copy embed code", 900);
+    }catch{
+      alert("Copy failed. Please manually copy the embed code.");
+    }
+  });
+
+  compressionSel.addEventListener("change", updateEmbed);
+
+  // Set current year + initial embed
+  $("yr").textContent = new Date().getFullYear();
+  updateEmbed();
+
+  // Optional: auto-fill LMP with today's date for convenience
+  // Comment this out if you prefer blank.
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth()+1).padStart(2,"0");
+  const dd = String(today.getDate()).padStart(2,"0");
+  $("lmp").value = `${yyyy}-${mm}-${dd}`;
+
+  // Initial calc
+  run();
+</script>
+</body>
+</html>
